@@ -1,3 +1,9 @@
-openai
-python-dotenv
+
+fastapi
+uvicorn
+agentscope-runtime
+pydantic
 requests
+python-dotenv
+anthropic
+openai
