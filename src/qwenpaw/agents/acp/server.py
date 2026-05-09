@@ -58,7 +58,17 @@ from ...__version__ import __version__
 from ...constant import WORKING_DIR
 from ...providers.models import ModelSlotConfig
 from ...providers.provider_manager import ProviderManager
-def _extract_text(blocks: PromptBlocks) -> str:
+from ...providers.provider_manager import ProviderManager
+
+PromptBlocks = list[
+    TextContentBlock
+    | ImageContentBlock
+    | AudioContentBlock
+    | ResourceContentBlock
+    | EmbeddedResourceContentBlock
+]
+
+def _extract_text(blocks: PromptBlocks) -> strdef _extract_text(blocks: PromptBlocks) -> str:
     """Pull plain text from ACP prompt content blocks."""
     parts: list[str] = []
     for block in blocks:
