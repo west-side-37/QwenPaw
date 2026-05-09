@@ -58,7 +58,32 @@ from ...__version__ import __version__
 from ...constant import WORKING_DIR
 from ...providers.models import ModelSlotConfig
 from ...providers.provider_manager import ProviderManager
+def _extract_text(blocks: PromptBlocks) -> str:
+    """Pull plain text from ACP prompt content blocks."""
+    parts: list[str] = []
+    for block in blocks:
+        if isinstance(block, dict):
+            text = block.get("text", "")
+        elif isinstance(block, TextContentBlock):
+            text = block.text
+        else:
+            text = getattr(block, "text", "")
+        if text:
+            parts.append(str(text))
+    return "\n".join(parts)
 
+
+class _StreamTracker:
+    """agentscope emits cumulative snapshots (each message contains the full
+    state so far).  ACP expects an event stream (each update is a delta).
+    This tracker maintains the necessary state to perform that conversion
+    for text, thinking, and tool-call events.
+    """
+
+    def __init__(self) -> None:
+        self._prev_text: str = ""
+        self._prev_thinking: str = ""
+        self._seen_tool_ids: set[str] = set()
 logger = logging.getLogger(__name__)
 
 
