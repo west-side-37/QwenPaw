@@ -1,16 +1,13 @@
-# -*- coding: utf-8 -*-
-"""ACP client and server exports."""
+app = Flask(__name__)
 
-from .core import (
-    ACPAgentConfig,
-    ACPConfig,
-    ACPConfigurationError,
-    ACPProtocolError,
-    ACPSessionError,
-    ACPTransportError,
-    ACPErrors,
-    PermissionResolution,
-    SuspendedPermission,
+@app.route("/health")
+def health():
+    return "OK", 200
+
+if __name__ == "__main__":
+    # Tells Northflank which port to use to stay online
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
 )
 from .server import QwenPawACPAgent, run_qwenpaw_agent
 from .service import ACPService, get_acp_service, init_acp_service
