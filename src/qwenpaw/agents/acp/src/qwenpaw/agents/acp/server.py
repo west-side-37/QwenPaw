@@ -379,7 +379,7 @@ class QwenPawACPAgent(Agent):
     """ACP Agent backed by a full ``Workspace``.
 
     Instead of creating a bare ``AgentRunner``, this class boots a
-    complete ``Workspace`` - the same lifecycle the web console uses —
+    complete ``Workspace`` - the same lifecycle the web console uses -
     so MCP tools, memory, chat persistence, sub-agent calls, etc. are
     all available.
     """
@@ -761,7 +761,7 @@ class QwenPawACPAgent(Agent):
             str_value = str(value)
             if str_value == self.MODE_BYPASS:
                 logger.warning(
-                    "Tool guard DISABLED for session %s — all tool "
+                    "Tool guard DISABLED for session %s - all tool "
                     "calls will bypass security checks.",
                     session_id,
                 )
@@ -883,7 +883,7 @@ class QwenPawACPAgent(Agent):
         Validates the provider/model pair exists, then writes the
         choice into ``agent.json`` so ``create_model_and_formatter``
         picks it up on the next ``prompt()`` call.  The global
-        ``ProviderManager`` state is **not** modified — the change
+        ``ProviderManager`` state is **not** modified - the change
         is scoped to this agent only.
 
         *model_spec* should be ``"provider_id:model_id"``.
