@@ -87,8 +87,11 @@ def _extract_text(content: list) -> str:
         if text:
             parts.append(str(text))
     return "\n".join(parts)
-
-
+class _StreamTracker:
+    # Convert agentscope's snapshot-style messages to ACP event stream.
+    def __init__(self) -> None:
+        self._last_content = []
+        self._last_format = Non
 self._last_content = []
         self._last_format = None
 
