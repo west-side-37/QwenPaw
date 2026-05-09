@@ -90,6 +90,8 @@ def _extract_text(
 
 class _StreamTracker:
     """Convert agentscope's snapshot-style messages to ACP event stream.
+    
+
 
     agentscope emits cumulative snapshots (each message contains the full
     state so far).  ACP expects an event stream (each update is a delta).
