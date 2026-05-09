@@ -89,9 +89,10 @@ def _extract_text(
 
 
 class _StreamTracker:
-    """
-    Convert agentscope's snapshot-style messages to ACP event stream.
-    """
+    # Convert agentscope's snapshot-style messages to ACP event stream.
+    
+    
+    
     
     
     
