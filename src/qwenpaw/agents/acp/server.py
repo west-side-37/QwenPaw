@@ -304,7 +304,7 @@ def _content_blocks_to_updates(
                                     block_data.get("output", ""),
                                 ),
                             ),
-                        ),
+structure - normalise everything to a flat string.                        ),
                     ],
                 ),
             )
