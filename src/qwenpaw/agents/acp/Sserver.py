@@ -67,17 +67,15 @@ PromptBlocks = list[
     | ResourceContentBlock
     | EmbeddedResourceContentBlock
 ]
-
-def _extract_text(blocks: PromptBlocks) -> strdef _extract_text(blocks: PromptBlocks) -> str:
-    """Pull plain text from ACP prompt content blocks."""
-    parts: list[str] = []
-    for block in blocks:
-        if isinstance(block, dict):
-            text = block.get("text", "")
-        elif isinstance(block, TextContentBlock):
-            text = block.text
-        else:
-            text = getattr(block, "text", "")
+def _extract_text(content: list) -> str:
+    # Pull plain text from ACP prompt content blocks
+    text_parts = []
+    for block in content:
+        if isinstance(block, dict) and "text" in block:
+            text_parts.append(block["text"])
+        elif isinstance(block, str):
+            text_parts.append(block)
+    return "".join(text_parts)
         if text:
             parts.append(str(text))
     return "\n".join(parts)
