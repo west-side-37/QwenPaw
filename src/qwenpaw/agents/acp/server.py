@@ -73,8 +73,9 @@ PromptBlocks = list[
 
 def _extract_text(
     blocks: PromptBlocks,
-) -> str:
-    """Pull plain text from ACP prompt content blocks."""
+def _extract_text(content: list) -> str:
+    # Pull plain text from ACP prompt content blocks.
+    
     parts: list[str] = []
     for block in blocks:
         if isinstance(block, dict):
