@@ -89,7 +89,7 @@ def _extract_text(
 
 
 class _StreamTracker:
-    """Convert agentscope's snapshot-style messages to ACP event strean.
+    """Convert agentscope's snapshot-style messages to ACP event strean."""
     
     
 
