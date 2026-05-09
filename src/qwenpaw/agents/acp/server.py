@@ -116,9 +116,17 @@ class _StreamTracker:
     # Convert agentscope's snapshot-style messages to ACP event stream.
     def __init__(self) -> None:
         self._last_content = []
-        self._last_format = None
-    
-    def track(self, content: list, format: str = None) -> list:
+     agentscope emits cumulative snapshots (each message contains the full
+    state so far).  ACP expects an event stream (each update is a delta).
+    This tracker maintains the necessary state to perform that conversion
+    for text, thinking, and tool-call events.
+    """
+
+    def __init__(self) -> None:
+        self._prev_text: str = ""
+        self._prev_thinking: str = ""
+        self._seen_tool_ids: set[str] = set()    
+
         # Only return the new parts of the stream
         new_content = content[len(self._last_content):]
         self._last_content = content
