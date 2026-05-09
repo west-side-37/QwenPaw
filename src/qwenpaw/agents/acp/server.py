@@ -7,7 +7,6 @@ Exposes QwenPaw as an ACP-compliant agent that external clients
 Uses the full ``Workspace`` lifecycle so the ACP agent has exactly
 the same capabilities as the web console (MCP tools, memory,
 sub-agent delegation, etc.).
-"""
 from __future__ import annotations
 
 import asyncio
