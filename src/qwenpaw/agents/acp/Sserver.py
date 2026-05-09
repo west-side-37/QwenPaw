@@ -314,7 +314,7 @@ def _extract_tool_output(output: Any) -> str:
     """Extract plain text from a tool output value.
 
     The output may be a string, a list of content blocks, or another
-    structure — normalise everything to a flat string.
+    structure - normalise everything to a flat string.
     """
     if isinstance(output, str):
         return output
@@ -381,7 +381,7 @@ class QwenPawACPAgent(Agent):
     """ACP Agent backed by a full ``Workspace``.
 
     Instead of creating a bare ``AgentRunner``, this class boots a
-    complete ``Workspace`` — the same lifecycle the web console uses —
+    complete ``Workspace`` - the same lifecycle the web console uses —
     so MCP tools, memory, chat persistence, sub-agent calls, etc. are
     all available.
     """
