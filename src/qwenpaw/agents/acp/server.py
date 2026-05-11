@@ -16,7 +16,8 @@ def home():
 @app.route('/command', methods=['POST'])
 def handle_command():
     data = request.json
-    user_input = data.get("cmd", "").lower()
+    # Fallback to an empty string if data is None
+    user_input = (data or {}).get("cmd", "").lower()
     
     # Logic for High-Stack Ticket Audits
     if "audit" in user_input:
