@@ -1,14 +1,7 @@
-import os
-from flask import Flask
+def health():
+    return "OK", 200
 
-app = Flask(__name__)
-
-# This is the "Front Door" - it stops Bing from hijacking the site
-@app.route("/")
-def home():
-    return {
-        "status": "online",
-        "agent": "Ghost CEO",
-        "brain": "Gemma 4",
-        "message": "System active. Awaiting Human-in-the-Loop TRU."
-    }
+if __name__ == "__main__":
+    # This matches the port 8080 from your logs
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
