@@ -1,28 +1,24 @@
 import os
+from flask import Flask
 
-# We are keeping it very basic to stop the Traceback
-try:
-    from flask import Flask
-except ImportError:
-    # If Flask is missing, we will just print a clear message instead of crashing
-    Flask = None
+app = Flask(__name__)
 
-if Flask:
-    app = Flask(__name__)
+# This is the "Front Door" - it stops the 404 Bing errors!
+@app.route("/")
+def home():
+    return {
+        "status": "online",
+        "agent": "Ghost CEO",
+        "brain": "Gemma 4",
+        "message": "System active. Awaiting Human-in-the-Loop TRU."
+    }
 
-    @app.route("/health")
-    def health():
-        return "OK", 200
-else:
-    print("WAITING: Flask is not installed yet.")
+# This keeps the Northflank health-check green
+@app.route("/health")
+def health():
+    return "OK", 200
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    if Flask:
-        app.run(host="0.0.0.0", port=port)
-    else:
-        # This keeps the container 'alive' so it doesn't loop-crash
-        import time
-        while True:
-            print("Server is idling... waiting for Flask.")
-            time.sleep(60)
+    # Northflank uses port 8080 for web traffic
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
