@@ -8,3 +8,5 @@ python-dotenv
 anthropic
 openai
 google-genai
+flask
+flask-cors
