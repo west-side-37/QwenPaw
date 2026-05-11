@@ -1,24 +1,36 @@
-import os
-from flask import Flask
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-# This is the "Front Door" that stops the Bing hijacking
-@app.route("/")
+# This is your main status page
+@app.route('/')
 def home():
     return {
-        "status": "online",
         "agent": "Ghost CEO",
         "brain": "Gemma 4",
-        "message": "System active. Awaiting Human-in-the-Loop TRU."
+        "message": "System active. Awaiting Human-in-the-Loop TRU.",
+        "status": "online"
     }
 
-# Standard health check
-@app.route("/health")
-def health():
-    return "OK", 200
+# This is the "Listening" pathway
+@app.route('/command', methods=['POST'])
+def handle_command():
+    data = request.json
+    user_input = data.get("cmd", "").lower()
+    
+    # Logic for High-Stack Ticket Audits
+    if "audit" in user_input:
+        response = "Command Received, TRU. Initializing High-Stack Ticket Audit protocols... scanning for discrepancies."
+    elif "hello" in user_input:
+        response = "Greetings, Commander TRU. Ghost CEO systems are fully synced."
+    else:
+        response = f"Ghost CEO is processing directive: '{user_input}'. Standing by for further HITL instructions."
 
-# THE ENGINE: This keeps the server listening for you
+    return jsonify({
+        "agent": "Ghost CEO",
+        "response": response,
+        "status": "Processing"
+    })
+
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8080))
-    app.run(host="0.0.0.0", port=port)
+    app.run(host='0.0.0.0', port=8080)
