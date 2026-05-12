@@ -1,24 +1,8 @@
-from flask import Flask, request, jsonify, render_template
-
-app = Flask(__name__)
-
-@app.route('/')
-def home():
-    return render_template('index.html')
-
-@app.route('/command', methods=['POST'])
-def handle_command():
-    data = request.json
-    user_input = (data or {}).get("cmd", "").lower()
+<div class="controls">
+    <button onclick="addLog('SYSTEM PINGED...')">PING SYSTEM</button>
     
-    if "audit" in user_input:
-        response = "High-Stack Ticket Audit initiated. Scanning system for high-value discrepancies, Commander TRU."
-    elif "hello" in user_input or "ping" in user_input:
-        response = "System online. Ghost CEO is synced and awaiting your verbal directive."
-    else:
-        response = f"Directive '{user_input}' received. Ghost CEO standing by."
-
-    return jsonify({"agent": "Ghost CEO", "response": response})
-
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8080)
+    <!-- THIS IS THE MISSING BUTTON -->
+    <button id="mic-btn" style="background: #4b0082; color: gold; border: 2px solid gold; font-size: 1.2rem;" onclick="startVoice()">🎤 COMMUNICATE</button>
+    
+    <button onclick="addLog('AUDIT INITIALIZED...')">RUN AUDIT</button>
+</div>
