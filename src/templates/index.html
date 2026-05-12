@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghost CEO | Command Deck</title>
+    <style>
+        body {
+            background-color: #0F0F0F; /* Charcoal Black */
+            color: #E0E0E0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            border-top: 5px solid #FFD700; /* Gold Top Border */
+        }
+        .deck {
+            background: #1A1A1A;
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 0 40px #6A0DAD; /* Purple Glow */
+            border: 1px solid #6A0DAD;
+            width: 450px;
+            text-align: center;
+        }
+        h1 { 
+            color: #FFD700; 
+            font-size: 2.5rem; 
+            margin-bottom: 10px; 
+            text-shadow: 2px 2px #000; 
+            letter-spacing: 3px; 
+            text-transform: uppercase;
+        }
+        .status-bar { 
+            font-size: 0.85rem; 
+            color: #888; 
+            margin-bottom: 30px; 
+            letter-spacing: 1px; 
+            font-weight: bold;
+        }
+        .status-dot { 
+            height: 10px; 
+            width: 10px; 
+            background: #00FF00; 
+            border-radius: 50%; 
+            display: inline-block; 
+            margin-right: 8px; 
+            box-shadow: 0 0 10px #00FF00; 
+        }
+        .btn-group { 
+            display: flex; 
+            gap: 15px; 
+            justify-content: center; 
+        }
+        button {
+            background: #6A0DAD;
+            color: #FFD700;
+            border: 2px solid #FFD700;
+            padding: 15px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        button:hover { 
+            background: #FFD700; 
+            color: #1A1A1A; 
+            transform: translateY(-3px); 
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4); 
+        }
+        #log { 
+            margin-top: 35px; 
+            padding: 20px; 
+            background: #000; 
+            border-radius: 12px; 
+            min-height: 60px; 
+            border-left: 4px solid #FFD700; 
+            font-family: 'Courier New', Courier, monospace; 
+            color: #BB86FC; 
+            text-align: left; 
+            line-height: 1.4; 
+        }
+    </style>
+</head>
+<body>
+    <div class="deck">
+        <h1>GHOST CEO</h1>
+        <div class="status-bar"><span class="status-dot"></span> SECURE CONNECTION ACTIVE | HITL: TRU</div>
+        <div class="btn-group">
+            <button onclick="send('audit')">RUN AUDIT</button>
+            <button onclick="send('hello')">PING SYSTEM</button>
+        </div>
+        <div id="log">Awaiting directive from Commander TRU...</div>
+    </div>
+
+    <script>
+        async function send(cmd) {
+            const log = document.getElementById('log');
+            log.innerText = "> [SYSTEM]: Processing directive...";
+            try {
+                const res = await fetch('/command', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({cmd: cmd})
+                });
+                const data = await res.json();
+                log.innerText = "> [GHOST-CEO]: " + data.response;
+            } catch (err) {
+                log.innerText = "> [ERROR]: Connection lost. Verify Northflank Status.";
+            }
+        }
+    </script>
+</body>
+</html>
