@@ -41,7 +41,7 @@
             color: #800080;
             transform: scale(1.1);
         }
-        #response { margin-top: 30px; font-style: italic; color: #fff; }
+        #response { margin-top: 30px; font-style: italic; color: #fff; height: 50px; }
     </style>
 </head>
 <body>
@@ -51,23 +51,47 @@
         <button id="mic-btn" onclick="startVoice()">🎤 COMMUNICATE</button>
         <div id="response">Waiting for directive, Commander TRU...</div>
     </div>
+
     <script>
         function startVoice() {
             const responseDiv = document.getElementById('response');
             responseDiv.innerText = "Listening...";
+            
             const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
             recognition.lang = 'en-US';
+            recognition.continuous = false; 
+            recognition.interimResults = true; // This lets us see words LIVE
+
             recognition.onresult = function(event) {
-                const transcript = event.results[0][0].transcript;
-                responseDiv.innerText = "Analyzing: " + transcript;
-                fetch('/command', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ cmd: transcript })
-                })
-                .then(res => res.json())
-                .then(data => { responseDiv.innerText = data.response; });
+                let transcript = "";
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    transcript += event.results[i][0].transcript;
+                }
+                
+                // Show words as you say them
+                responseDiv.innerText = "Heard: " + transcript;
+
+                if (event.results[0].isFinal) {
+                    responseDiv.innerText = "Analyzing: " + transcript;
+                    fetch('/command', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ cmd: transcript })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        responseDiv.innerText = data.response;
+                    })
+                    .catch(err => {
+                        responseDiv.innerText = "Connection Error. Check Northflank logs.";
+                    });
+                }
             };
+
+            recognition.onerror = function(event) {
+                responseDiv.innerText = "Mic Error: " + event.error;
+            };
+
             recognition.start();
         }
     </script>
