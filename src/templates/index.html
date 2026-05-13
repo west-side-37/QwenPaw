@@ -6,7 +6,7 @@
     <title>Ghost CEO | Command Deck</title>
     <style>
         body {
-            background-color: #0F0F0F; /* Charcoal Black */
+            background-color: #0F0F0F;
             color: #E0E0E0;
             font-family: 'Segoe UI', Arial, sans-serif;
             display: flex;
@@ -14,15 +14,15 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            border-top: 5px solid #FFD700; /* Gold Top Border */
+            border-top: 5px solid #FFD700;
         }
         .deck {
             background: #1A1A1A;
             padding: 40px;
             border-radius: 25px;
-            box-shadow: 0 0 40px #6A0DAD; /* Purple Glow */
+            box-shadow: 0 0 40px #6A0DAD;
             border: 1px solid #6A0DAD;
-            width: 450px;
+            width: 480px;
             text-align: center;
         }
         h1 { 
@@ -36,7 +36,7 @@
         .status-bar { 
             font-size: 0.85rem; 
             color: #888; 
-            margin-bottom: 30px; 
+            margin-bottom: 25px; 
             letter-spacing: 1px; 
             font-weight: bold;
         }
@@ -49,36 +49,51 @@
             margin-right: 8px; 
             box-shadow: 0 0 10px #00FF00; 
         }
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
         .btn-group { 
             display: flex; 
-            gap: 15px; 
+            gap: 10px; 
             justify-content: center; 
         }
         button {
             background: #6A0DAD;
             color: #FFD700;
             border: 2px solid #FFD700;
-            padding: 15px 25px;
+            padding: 12px 20px;
             border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 1rem;
             transition: all 0.3s ease;
         }
         button:hover { 
             background: #FFD700; 
             color: #1A1A1A; 
-            transform: translateY(-3px); 
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4); 
+            transform: translateY(-2px); 
+        }
+        input[type="text"] {
+            background: #000;
+            color: #FFD700;
+            border: 2px solid #6A0DAD;
+            padding: 15px;
+            width: 80%;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            outline: none;
         }
         #log { 
-            margin-top: 35px; 
+            margin-top: 30px; 
             padding: 20px; 
             background: #000; 
             border-radius: 12px; 
-            min-height: 60px; 
+            min-height: 80px; 
             border-left: 4px solid #FFD700; 
-            font-family: 'Courier New', Courier, monospace; 
+            font-family: 'Courier New', monospace; 
             color: #BB86FC; 
             text-align: left; 
             line-height: 1.4; 
@@ -88,18 +103,27 @@
 <body>
     <div class="deck">
         <h1>GHOST CEO</h1>
-        <div class="status-bar"><span class="status-dot"></span> SECURE CONNECTION ACTIVE | HITL: TRU</div>
-        <div class="btn-group">
-            <button onclick="send('audit')">RUN AUDIT</button>
-            <button onclick="send('hello')">PING SYSTEM</button>
+        <div class="status-bar"><span class="status-dot"></span> SECURE CONNECTION ACTIVE | COMMANDER: TRU</div>
+        
+        <div class="control-panel">
+            <!-- Text Input for Manual Directives -->
+            <input type="text" id="manual_cmd" placeholder="Type directive..." onkeypress="if(event.key === 'Enter') handleText()">
+            
+            <div class="btn-group">
+                <button onclick="handleText()">EXECUTE</button>
+                <button onclick="startVoice()">🎤 VOICE</button>
+                <button onclick="send('audit')">AUDIT</button>
+            </div>
         </div>
-        <div id="log">Awaiting directive from Commander TRU...</div>
+
+        <div id="log">Awaiting directive, Commander TRU...</div>
     </div>
 
     <script>
+        const log = document.getElementById('log');
+
         async function send(cmd) {
-            const log = document.getElementById('log');
-            log.innerText = "> [SYSTEM]: Processing directive...";
+            log.innerText = "> [SYSTEM]: Transmitting directive...";
             try {
                 const res = await fetch('/command', {
                     method: 'POST',
@@ -109,8 +133,34 @@
                 const data = await res.json();
                 log.innerText = "> [GHOST-CEO]: " + data.response;
             } catch (err) {
-                log.innerText = "> [ERROR]: Connection lost. Verify Northflank Status.";
+                log.innerText = "> [ERROR]: Network disruption. Check Northflank logs.";
             }
+        }
+
+        function handleText() {
+            const input = document.getElementById('manual_cmd');
+            if (input.value.trim() !== "") {
+                send(input.value);
+                input.value = ""; // Clear after sending
+            }
+        }
+
+        function startVoice() {
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US';
+            log.innerText = "> [LISTENING]: Speak your directive...";
+            
+            recognition.onresult = (event) => {
+                const speechToText = event.results[0][0].transcript;
+                log.innerText = "> [VOICE]: " + speechToText;
+                send(speechToText);
+            };
+
+            recognition.onerror = () => {
+                log.innerText = "> [ERROR]: Mic Error: network. Switch to Manual Execute.";
+            };
+
+            recognition.start();
         }
     </script>
 </body>
